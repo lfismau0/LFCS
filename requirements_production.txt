@@ -1,3 +1,6 @@
+# IMPORTANT: Use Python 3.10 (not 3.13) for compatibility
+# On PythonAnywhere: python3.10 -m venv venv
+
 # Core Django
 Django==4.2.9
 
