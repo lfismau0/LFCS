@@ -1,0 +1,32 @@
+# Core Django
+Django==4.2.9
+
+# Database
+mysqlclient==2.2.4
+
+# Admin theme
+django-jazzmin==3.0.2
+
+# Rich text editor
+django-ckeditor==6.7.3
+django-js-asset==3.1.2
+
+# Import/Export functionality
+django-import-export==4.3.4
+tablib==3.8.0
+et_xmlfile==2.0.0
+openpyxl==3.1.5
+
+# Sortable admin
+django-admin-sortable2==2.3.1
+
+# Static files
+whitenoise==6.6.0
+
+# Image processing
+Pillow==10.1.0
+
+# Other dependencies
+asgiref==3.11.0
+sqlparse==0.5.1
+diff-match-patch==20241021
