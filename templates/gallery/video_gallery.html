@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Video Gallery – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Video Gallery</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-4">
+            {% for video in videos %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card-hover rounded-3 overflow-hidden h-100">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="p-3">
+                        <h6>{{ video.title }}</h6>
+                        {% if video.description %}<p class="text-muted" style="font-size:.83rem">{{ video.description }}
+                        </p>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No videos yet.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

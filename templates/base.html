@@ -1,0 +1,322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="{% block meta_description %}{{ site_settings.school_name }} – {{ site_settings.tagline }}{% endblock %}">
+  <title>{% block title %}{{ site_settings.school_name }}{% endblock %}</title>
+
+  {% if site_settings.favicon %}
+  <link rel="icon" type="image/png" href="{{ site_settings.favicon.url }}">
+  {% else %}
+  <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}" onerror="this.remove()">
+  {% endif %}
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <style>
+    :root {
+      {% if site_settings.primary_color %}--primary: {{ site_settings.primary_color }};{% endif %}
+      {% if site_settings.secondary_color %}--secondary: {{ site_settings.secondary_color }};{% endif %}
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- ══════════ TOP QUICK-ACTION BAR (Sunbeam-style) ══════════ -->
+  <div id="quickBar" class="d-none d-lg-block">
+    <div class="container-fluid px-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-1">
+          {% if contact %}
+          <i class="fas fa-phone-alt me-1" style="color:var(--secondary);font-size:.8rem;"></i>
+          <a href="tel:{{ contact.phone }}" style="color:rgba(255,255,255,.8);font-size:.78rem;">{{ contact.phone }}</a>
+          {% if contact.email %}
+          <span class="divider">|</span>
+          <i class="fas fa-envelope me-1" style="color:var(--secondary);font-size:.8rem;"></i>
+          <a href="mailto:{{ contact.email }}" style="color:rgba(255,255,255,.8);font-size:.78rem;">{{ contact.email }}</a>
+          {% endif %}
+          {% endif %}
+        </div>
+        <div class="d-flex align-items-center gap-1 flex-wrap">
+          <a href="{% url 'admission_process' %}"><i class="fas fa-user-plus me-1"></i>Admission Enquiry</a>
+          <span class="divider">|</span>
+          <a href="{% url 'disclosure' %}"><i class="fas fa-landmark me-1"></i>Mandatory Disclosure</a>
+          <span class="divider">|</span>
+          <a href="{% url 'tc_search' %}"><i class="fas fa-file-alt me-1"></i>Transfer Certificate</a>
+          <span class="divider">|</span>
+          <a href="{% url 'fee_structure' %}"><i class="fas fa-rupee-sign me-1"></i>Fee Structure</a>
+          {% if social %}
+          <span class="divider">|</span>
+          {% if social.facebook_url %}<a href="{{ social.facebook_url }}" target="_blank"><i
+              class="fab fa-facebook-f"></i></a>{% endif %}
+          {% if social.instagram_url %}<a href="{{ social.instagram_url }}" target="_blank"><i
+              class="fab fa-instagram"></i></a>{% endif %}
+          {% if social.youtube_url %}<a href="{{ social.youtube_url }}" target="_blank"><i
+              class="fab fa-youtube"></i></a>{% endif %}
+          {% if social.twitter_url %}<a href="{{ social.twitter_url }}" target="_blank"><i
+              class="fab fa-twitter"></i></a>{% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ NAVBAR ══════════ -->
+  <nav id="mainNav" class="navbar navbar-expand-lg">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+        {% if site_settings.logo %}
+        <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.school_name }}"
+          style="height:52px;width:auto;object-fit:contain;">
+        {% else %}
+        <i class="fas fa-graduation-cap fa-2x text-primary" style="color:var(--primary)!important"></i>
+        {% endif %}
+        <div class="d-flex flex-column justify-content-center ms-2">
+          <span class="d-block fw-bold text-uppercase" style="font-size: 1.6rem; color: var(--primary); letter-spacing: 0.5px; line-height: 1.2;">
+            {{ site_settings.school_name }}
+          </span>
+          <small class="d-block fw-semibold text-dark" style="font-size: 0.85rem; letter-spacing: 0.2px; line-height: 1.2; opacity: 0.85;">
+            AN ISO 9001:2008 CERTIFIED (Affiliated to C.B.S.E. New Delhi)
+          </small>
+        </div>
+      </a>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+          <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+              href="{% url 'home' %}">Home</a></li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About Us</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'about' %}"><i class="fas fa-school me-2 text-primary"
+                    style="color:var(--primary)!important"></i>About School</a></li>
+              <li><a class="dropdown-item" href="{% url 'director_message' %}"><i class="fas fa-user-tie me-2"
+                    style="color:var(--primary)"></i>Director's Message</a></li>
+              <li><a class="dropdown-item" href="{% url 'principal_message' %}"><i
+                    class="fas fa-chalkboard-teacher me-2" style="color:var(--primary)"></i>Principal's Message</a></li>
+              <li><a class="dropdown-item" href="{% url 'captain' %}"><i class="fas fa-star me-2"
+                    style="color:var(--secondary)"></i>School Captain</a></li>
+              <li><a class="dropdown-item" href="{% url 'house' %}"><i class="fas fa-flag me-2"
+                    style="color:var(--primary)"></i>House System</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Academics</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'curriculum' %}">Curriculum</a></li>
+              <li><a class="dropdown-item" href="{% url 'fee_structure' %}">Fee Structure</a></li>
+              <li><a class="dropdown-item" href="{% url 'book_list' %}">Book List</a></li>
+              <li><a class="dropdown-item" href="{% url 'academic_calendar' %}">Academic Calendar</a></li>
+              <li><a class="dropdown-item" href="{% url 'admission_process' %}">Admission Process</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Gallery</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'photo_gallery' %}"><i class="fas fa-images me-2"></i>Photo
+                  Gallery</a></li>
+              <li><a class="dropdown-item" href="{% url 'video_gallery' %}"><i class="fas fa-video me-2"></i>Video
+                  Gallery</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Corner</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'corner' 'student' %}"><i
+                    class="fas fa-user-graduate me-2"></i>Student Corner</a></li>
+              <li><a class="dropdown-item" href="{% url 'corner' 'teacher' %}"><i
+                    class="fas fa-chalkboard me-2"></i>Teacher Corner</a></li>
+              <li><a class="dropdown-item" href="{% url 'corner' 'parent' %}"><i class="fas fa-users me-2"></i>Parent
+                  Corner</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a class="nav-link" href="{% url 'notices' %}">Notices</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'facilities' %}">Facilities</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'staff' %}">Staff</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'alumni' %}">Alumni</a></li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">More</a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="{% url 'tc_search' %}">Transfer Certificate</a></li>
+              <li><a class="dropdown-item" href="{% url 'prospectus' %}">Prospectus</a></li>
+              <li><a class="dropdown-item" href="{% url 'career' %}">Career</a></li>
+              <li><a class="dropdown-item" href="{% url 'disclosure' %}"><i class="fas fa-landmark me-1"></i>Public
+                  Disclosure</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-primary-custom btn-sm" href="{% url 'contact' %}">
+              <i class="fas fa-envelope me-1"></i> Contact Us
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════ MAIN CONTENT ══════════ -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer id="mainFooter">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+          <h5>About LFCS</h5>
+          <p style="font-size:.88rem;color:rgba(255,255,255,.7);line-height:1.7;">
+            Little Flower Children School is committed to nurturing young minds with excellence in education, values,
+            and holistic development.
+          </p>
+          <div class="social-icons mt-3">
+            {% if social %}
+            {% if social.facebook_url %}<a href="{{ social.facebook_url }}" target="_blank"><i
+                class="fab fa-facebook-f"></i></a>{% endif %}
+            {% if social.instagram_url %}<a href="{{ social.instagram_url }}" target="_blank"><i
+                class="fab fa-instagram"></i></a>{% endif %}
+            {% if social.youtube_url %}<a href="{{ social.youtube_url }}" target="_blank"><i
+                class="fab fa-youtube"></i></a>{% endif %}
+            {% if social.twitter_url %}<a href="{{ social.twitter_url }}" target="_blank"><i
+                class="fab fa-twitter"></i></a>{% endif %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6">
+          <h5>Quick Links</h5>
+          <ul class="footer-links list-unstyled">
+            <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Home</a></li>
+            <li><a href="{% url 'about' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>About Us</a></li>
+            <li><a href="{% url 'notices' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Notice Board</a></li>
+            <li><a href="{% url 'facilities' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Facilities</a></li>
+            <li><a href="{% url 'photo_gallery' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Gallery</a></li>
+            <li><a href="{% url 'staff' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Staff</a></li>
+            <li><a href="{% url 'alumni' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Alumni</a></li>
+            <li><a href="{% url 'career' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Career</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5>Academics</h5>
+          <ul class="footer-links list-unstyled">
+            <li><a href="{% url 'curriculum' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Curriculum</a></li>
+            <li><a href="{% url 'fee_structure' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Fee Structure</a></li>
+            <li><a href="{% url 'book_list' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Book List</a></li>
+            <li><a href="{% url 'academic_calendar' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Academic Calendar</a></li>
+            <li><a href="{% url 'admission_process' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Admission Process</a></li>
+            <li><a href="{% url 'tc_search' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Transfer Certificate</a></li>
+            <li><a href="{% url 'disclosure' %}"><i class="fas fa-chevron-right me-1"
+                  style="font-size:.6rem;color:var(--secondary)"></i>Public Disclosure</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h5>Contact Us</h5>
+          {% if contact %}
+          <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span>{{ contact.address }}</span></div>
+          <div class="contact-item"><i class="fas fa-phone-alt"></i><a href="tel:{{ contact.phone }}"
+              style="color:rgba(255,255,255,.7)">{{ contact.phone }}</a></div>
+          {% if contact.whatsapp %}<div class="contact-item"><i class="fab fa-whatsapp"></i><a
+              href="https://wa.me/{{ contact.whatsapp }}" style="color:rgba(255,255,255,.7)">{{ contact.whatsapp }}</a>
+          </div>{% endif %}
+          <div class="contact-item"><i class="fas fa-envelope"></i><a href="mailto:{{ contact.email }}"
+              style="color:rgba(255,255,255,.7)">{{ contact.email }}</a></div>
+          {% endif %}
+          <!-- Map embed placeholder -->
+          <div class="mt-3 rounded-3 overflow-hidden" style="height:120px;">
+            {% if contact %}
+            <iframe src="https://maps.google.com/maps?q={{ contact.address|urlencode }}&output=embed" width="100%"
+              height="120" style="border:0;filter:invert(.9) hue-rotate(180deg);" allowfullscreen
+              loading="lazy"></iframe>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="mb-0">&copy; {% now "Y" %} {{ site_settings.school_name }}{% if site_settings.footer_text %}. {{ site_settings.footer_text }}{% else %}. All rights reserved.{% endif %}</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════ FLOATING ACTION BUTTONS ══════════ -->
+  {% if contact %}
+  <div class="fab-container">
+    {% if contact.phone %}
+    <a href="tel:{{ contact.phone }}" class="fab-btn fab-call" title="Call Us">
+      <i class="fas fa-phone-alt"></i>
+      <span class="fab-label">Call Us</span>
+    </a>
+    {% endif %}
+    {% if contact.whatsapp %}
+    <a href="https://wa.me/{{ contact.whatsapp }}" target="_blank" class="fab-btn fab-whatsapp" title="WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      <span class="fab-label">WhatsApp</span>
+    </a>
+    {% endif %}
+    {% if contact.email %}
+    <a href="mailto:{{ contact.email }}" class="fab-btn fab-email" title="Email Us">
+      <i class="fas fa-envelope"></i>
+      <span class="fab-label">Email Us</span>
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Back to Top -->
+  <button id="backToTop" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+
+  <script>
+    // Navbar scroll shadow
+    window.addEventListener('scroll', () => {
+      document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+</body>
+
+</html>

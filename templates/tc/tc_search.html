@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}TC Search – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Transfer Certificate Search</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container" style="max-width:680px">
+        <div class="bg-white rounded-3 shadow p-5">
+            <h4 class="text-primary-custom mb-1"><i class="fas fa-search me-2"></i>Search T.C.</h4>
+            <p class="text-muted mb-4">Enter the student's Admission Number to find their Transfer Certificate.</p>
+            <form method="get" class="d-flex gap-2 mb-4">
+                <input type="text" name="admission_no" class="form-control" placeholder="Admission Number"
+                    value="{{ query }}" required>
+                <button type="submit" class="btn btn-primary-custom px-4">Search</button>
+            </form>
+
+            {% if not_found %}
+            <div class="alert alert-warning"><i class="fas fa-exclamation-circle me-2"></i>No record found for admission
+                number <strong>{{ query }}</strong>.</div>
+            {% endif %}
+
+            {% if result %}
+            <div class="tc-result">
+                <h5 class="text-success mb-3"><i class="fas fa-check-circle me-2"></i>Record Found</h5>
+                <table class="table table-bordered">
+                    <tr>
+                        <td>Student Name</td>
+                        <td><strong>{{ result.student_name }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Class</td>
+                        <td>{{ result.student_class }}</td>
+                    </tr>
+                    <tr>
+                        <td>Father's Name</td>
+                        <td>{{ result.father_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Admission No.</td>
+                        <td>{{ result.admission_no }}</td>
+                    </tr>
+                    <tr>
+                        <td>TC Number</td>
+                        <td>{{ result.tc_number }}</td>
+                    </tr>
+                    <tr>
+                        <td>Issue Date</td>
+                        <td>{{ result.issue_date }}</td>
+                    </tr>
+                </table>
+                {% if result.pdf_upload %}
+                <a href="{{ result.pdf_upload.url }}" class="btn btn-primary-custom" target="_blank"><i
+                        class="fas fa-download me-2"></i>Download TC (PDF)</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

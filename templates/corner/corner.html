@@ -1,0 +1,32 @@
+﻿{% extends 'base.html' %}
+{% block title %}{{ title }} - LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>{{ title }}</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="d-flex gap-2 justify-content-center mb-4">
+            <a href="{% url 'corner' 'student' %}" class="btn {% if category == 'student' %}btn-primary-custom{% else %}btn-outline-custom{% endif %}"><i class="fas fa-user-graduate me-1"></i>Student</a>
+            <a href="{% url 'corner' 'teacher' %}" class="btn {% if category == 'teacher' %}btn-primary-custom{% else %}btn-outline-custom{% endif %}"><i class="fas fa-chalkboard me-1"></i>Teacher</a>
+            <a href="{% url 'corner' 'parent' %}" class="btn {% if category == 'parent' %}btn-primary-custom{% else %}btn-outline-custom{% endif %}"><i class="fas fa-users me-1"></i>Parent</a>
+        </div>
+        <div class="row g-4">
+            {% for item in items %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card-hover rounded-3 p-4 bg-white h-100">
+                    <h5 class="text-primary-custom mb-2"><i class="fas fa-file-alt me-2"></i>{{ item.title }}</h5>
+                    {% if item.description %}<p class="text-muted" style="font-size:.9rem">{{ item.description }}</p>{% endif %}
+                    {% if item.file_upload %}
+                    <a href="{{ item.file_upload.url }}" class="btn btn-sm btn-primary-custom mt-2" target="_blank"><i class="fas fa-download me-1"></i>Download</a>
+                    {% endif %}
+                    <small class="text-muted d-block mt-2">{{ item.created_at|date:"d M Y" }}</small>
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No items available in this corner.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

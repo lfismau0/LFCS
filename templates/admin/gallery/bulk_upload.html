@@ -1,0 +1,112 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div style="max-width:700px;margin:0 auto;">
+
+  <div style="background:linear-gradient(135deg,#1a3c6b,#0d5fa8);color:#fff;border-radius:16px;padding:2rem 2.5rem;margin-bottom:2rem;">
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div style="width:60px;height:60px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-cloud-upload-alt" style="font-size:1.8rem;"></i>
+      </div>
+      <div>
+        <h2 style="margin:0;font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:700;">Bulk Photo Upload</h2>
+        <p style="margin:.25rem 0 0;color:rgba(255,255,255,.75);font-size:.95rem;">Album: <strong>{{ album.album_name }}</strong></p>
+      </div>
+    </div>
+  </div>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}" style="border-radius:10px;margin-bottom:1rem;padding:1rem 1.5rem;border-left:4px solid {% if 'success' in message.tags %}#28a745{% else %}#e8a020{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div style="background:#fff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.1);padding:2rem 2.5rem;">
+
+    <div style="background:linear-gradient(135deg,#e3f2fd,#fff8e1);border:2px dashed #e8a020;border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:2rem;">
+      <i class="fas fa-images" style="font-size:3rem;color:#1a3c6b;opacity:.3;display:block;margin-bottom:.75rem;"></i>
+      <p style="margin:0;font-weight:700;color:#1a3c6b;font-size:1rem;">Select Multiple Images at Once</p>
+      <p style="margin:.5rem 0 0;color:#666;font-size:.88rem;">Hold <kbd>Ctrl</kbd> (or <kbd>Cmd</kbd> on Mac) while clicking to select multiple files.<br>Supports JPG, PNG, WebP, GIF.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="bulkUploadForm">
+      {% csrf_token %}
+
+      <div style="margin-bottom:1.5rem;">
+        <label for="images" style="display:block;font-weight:700;color:#1a3c6b;margin-bottom:.5rem;font-size:.9rem;">
+          <i class="fas fa-folder-open" style="margin-right:.4rem;color:#e8a020;"></i>
+          Choose Photo Files
+        </label>
+        <input
+          type="file"
+          name="images"
+          id="images"
+          multiple
+          accept="image/*"
+          style="width:100%;padding:.75rem;border:2px solid #dee2e6;border-radius:10px;font-size:.9rem;cursor:pointer;"
+          onchange="updateFileCount(this)"
+        >
+        <div id="fileCount" style="margin-top:.5rem;font-size:.85rem;color:#666;"></div>
+      </div>
+
+      <!-- Preview container -->
+      <div id="previewGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem;margin-bottom:1.5rem;"></div>
+
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <button type="submit" class="btn btn-primary" style="padding:.75rem 2rem;font-weight:700;border-radius:10px;font-size:.95rem;">
+          <i class="fas fa-upload" style="margin-right:.5rem;"></i>Upload All Photos
+        </button>
+        <a href="/admin/gallery/album/{{ album.pk }}/change/" class="btn btn-secondary" style="padding:.75rem 1.5rem;border-radius:10px;">
+          <i class="fas fa-arrow-left" style="margin-right:.5rem;"></i>Back to Album
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tips -->
+  <div style="background:#fff;border-radius:12px;border:1px solid #e0e0e0;padding:1.5rem;margin-top:1.5rem;">
+    <h5 style="color:#1a3c6b;margin-bottom:.75rem;"><i class="fas fa-lightbulb" style="color:#e8a020;margin-right:.5rem;"></i>Tips</h5>
+    <ul style="margin:0;color:#555;font-size:.88rem;line-height:1.9;">
+      <li>You can upload up to <strong>50+ photos</strong> at once using this page.</li>
+      <li>After uploading, you can edit captions from the Album change page.</li>
+      <li>Supported formats: <strong>JPG, PNG, WebP, GIF</strong></li>
+      <li>For best gallery appearance, use landscape photos (4:3 or 16:9 ratio).</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+function updateFileCount(input) {
+  const count = input.files.length;
+  const countEl = document.getElementById('fileCount');
+  const preview = document.getElementById('previewGrid');
+  preview.innerHTML = '';
+
+  if (count > 0) {
+    countEl.innerHTML = `<span style="color:#28a745;font-weight:600;"><i class="fas fa-check-circle"></i> ${count} file${count > 1 ? 's' : ''} selected</span>`;
+
+    // Show previews for up to 20 images
+    const showCount = Math.min(count, 20);
+    for (let i = 0; i < showCount; i++) {
+      const reader = new FileReader();
+      const img = document.createElement('img');
+      img.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;border:2px solid #dee2e6;';
+      reader.onload = e => img.src = e.target.result;
+      reader.readAsDataURL(input.files[i]);
+      preview.appendChild(img);
+    }
+    if (count > 20) {
+      const more = document.createElement('div');
+      more.style.cssText = 'display:flex;align-items:center;justify-content:center;aspect-ratio:1;background:#f0f4f8;border-radius:6px;border:2px dashed #aaa;color:#666;font-size:.85rem;font-weight:600;';
+      more.textContent = `+${count - 20} more`;
+      preview.appendChild(more);
+    }
+  } else {
+    countEl.innerHTML = '';
+  }
+}
+</script>
+{% endblock %}

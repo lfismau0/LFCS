@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}School Captain – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>School Captains</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            {% for c in captains %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card-hover rounded-3 overflow-hidden text-center">
+                    {% if c.photo %}<img src="{{ c.photo.url }}" alt="{{ c.name }}"
+                        style="width:100%;height:280px;object-fit:cover;object-position:top">{% endif %}
+                    <div class="p-4" style="background:var(--gradient);color:#fff">
+                        <div
+                            style="background:var(--secondary);color:var(--dark);display:inline-block;padding:.2rem .8rem;border-radius:20px;font-size:.75rem;font-weight:700;margin-bottom:.5rem">
+                            {{ c.year }}</div>
+                        <h4 class="mb-0">{{ c.name }}</h4>
+                        <p class="mb-0 opacity-75">Class {{ c.student_class }}</p>
+                    </div>
+                    {% if c.message %}
+                    <div class="p-3 bg-white">
+                        <p class="text-muted mb-0" style="font-size:.88rem;font-style:italic">"{{ c.message }}"</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No school captain data available.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

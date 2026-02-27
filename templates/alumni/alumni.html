@@ -1,0 +1,34 @@
+﻿{% extends 'base.html' %}
+{% block title %}Alumni - LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Our Alumni</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <form method="get" class="d-flex justify-content-center gap-2 mb-4">
+            <select name="batch" class="form-select" style="max-width:200px">
+                <option value="">All Batches</option>
+                {% for b in batches %}<option value="{{ b }}" {% if b == selected_batch %}selected{% endif %}>Batch {{ b }}</option>{% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary-custom">Filter</button>
+        </form>
+        <div class="row g-4">
+            {% for a in alumni %}
+            <div class="col-6 col-md-4 col-lg-3 alumni-card-wrap" data-batch="{{ a.batch }}">
+                <div class="card-hover rounded-3 overflow-hidden text-center p-3">
+                    {% if a.photo %}<img src="{{ a.photo.url }}" alt="{{ a.name }}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;border:3px solid var(--secondary);margin:0 auto .75rem">
+                    {% else %}<div style="width:90px;height:90px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem"><i class="fas fa-user fa-2x text-muted"></i></div>{% endif %}
+                    <h6 class="mb-0">{{ a.name }}</h6>
+                    <small class="text-muted">Batch {{ a.batch }}</small>
+                    {% if a.profession %}<p class="mt-1 mb-0" style="font-size:.82rem;color:var(--primary)">{{ a.profession }}</p>{% endif %}
+                    {% if a.achievement %}<p class="mt-1 mb-0 text-muted" style="font-size:.78rem">{{ a.achievement|truncatechars:80 }}</p>{% endif %}
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No alumni found.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

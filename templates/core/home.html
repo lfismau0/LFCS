@@ -1,0 +1,851 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home – Little Flower Children School{% endblock %}
+
+{% block content %}
+
+<!-- ══ POPUP ══ -->
+{% if popup %}
+<div class="modal fade" id="popupModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ popup.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if popup.image %}<img src="{{ popup.image.url }}" class="img-fluid rounded mb-3"
+                    alt="{{ popup.title }}">{% endif %}
+                {% if popup.description %}<p>{{ popup.description }}</p>{% endif %}
+                {% if popup.button_link %}
+                <a href="{{ popup.button_link }}" class="btn btn-primary-custom">Learn More</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ══ HERO / BANNER SLIDER ══ -->
+{% if banners %}
+<div id="bannerCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
+        {% for banner in banners %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+            <div class="carousel-caption">
+                <div class="caption-eyebrow">Little Flower Children School</div>
+                <h5>{{ banner.title|default:"Education that empowers, inspires, and transforms." }}</h5>
+                {% if banner.subtitle %}<p>{{ banner.subtitle }}</p>{% endif %}
+                <div class="hero-cta d-flex gap-3 flex-wrap">
+                    {% if banner.button_text and banner.button_link %}
+                    <a href="{{ banner.button_link }}" class="btn btn-primary-custom">{{ banner.button_text }}</a>
+                    {% else %}
+                    <a href="{% url 'about' %}" class="btn btn-primary-custom">Discover More <i
+                            class="fas fa-arrow-right ms-1"></i></a>
+                    <a href="{% url 'admission_process' %}" class="btn btn-outline-custom"
+                        style="border-color:rgba(255,255,255,.7);color:#fff;">Apply Now</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#bannerCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#bannerCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+    <div class="carousel-indicators">
+        {% for banner in banners %}
+        <button type="button" data-bs-target="#bannerCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+            class="{% if forloop.first %}active{% endif %}"></button>
+        {% endfor %}
+    </div>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+        <div class="mouse"></div>
+        <span>Scroll</span>
+    </div>
+</div>
+{% else %}
+<!-- Static hero (no banners uploaded) -->
+<div class="hero-static position-relative overflow-hidden">
+    <div class="container py-5 position-relative z-1">
+        <div class="row min-vh-100 align-items-center" style="min-height:580px;max-height:780px;">
+            <div class="col-lg-8">
+                <p class="text-uppercase fw-600 mb-2"
+                    style="color:var(--secondary);letter-spacing:3px;font-size:.85rem;font-weight:600;">Little Flower
+                    Children School</p>
+                <h1 class="display-4 fw-bold text-white mb-4"
+                    style="font-family:'Poppins',sans-serif;line-height:1.15;">
+                    "Education that <span style="color:var(--secondary);">empowers</span>, inspires, and transforms."
+                </h1>
+                <p class="text-white-50 fs-5 mb-5" style="max-width:540px;line-height:1.7;">
+                    Nurturing young minds with excellence, values, and a passion for lifelong learning.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'about' %}" class="btn btn-primary-custom btn-lg">
+                        Discover More <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                    <a href="{% url 'admission_process' %}" class="btn btn-lg"
+                        style="border:2px solid rgba(255,255,255,.6);color:#fff;border-radius:30px;padding:.7rem 1.8rem;font-weight:600;">
+                        Apply Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+        <div class="mouse"></div>
+        <span>Scroll</span>
+    </div>
+</div>
+{% endif %}
+
+<!-- ══ QUICK LINKS BAR ══ -->
+<div class="quick-links py-3">
+    <div class="container">
+        <div class="row row-cols-4 row-cols-md-8 g-2 text-center">
+            {% for icon,label,url in quick_links %}
+            <div class="col"><a href="{{ url }}" class="quick-link-item"><i class="fas {{ icon }}"></i><span>{{ label }}</span></a></div>
+            {% empty %}
+            <div class="col"><a href="{% url 'notices' %}" class="quick-link-item"><i
+                        class="fas fa-bell"></i><span>Notices</span></a></div>
+            <div class="col"><a href="{% url 'admission_process' %}" class="quick-link-item"><i
+                        class="fas fa-user-plus"></i><span>Admission</span></a></div>
+            <div class="col"><a href="{% url 'tc_search' %}" class="quick-link-item"><i
+                        class="fas fa-file-alt"></i><span>T.C. Search</span></a></div>
+            <div class="col"><a href="{% url 'fee_structure' %}" class="quick-link-item"><i
+                        class="fas fa-rupee-sign"></i><span>Fee Structure</span></a></div>
+            <div class="col"><a href="{% url 'book_list' %}" class="quick-link-item"><i
+                        class="fas fa-book"></i><span>Book List</span></a></div>
+            <div class="col"><a href="{% url 'academic_calendar' %}" class="quick-link-item"><i
+                        class="fas fa-calendar-alt"></i><span>Calendar</span></a></div>
+            <div class="col"><a href="{% url 'photo_gallery' %}" class="quick-link-item"><i
+                        class="fas fa-images"></i><span>Gallery</span></a></div>
+            <div class="col"><a href="{% url 'career' %}" class="quick-link-item"><i
+                        class="fas fa-briefcase"></i><span>Career</span></a></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- ══ NOTICE TICKER ══ -->
+{% if notices %}
+<div class="notice-ticker d-flex align-items-center">
+    <span class="ticker-label"><i class="fas fa-bullhorn me-1"></i> Latest Notices</span>
+    <div class="ticker-wrap px-3">
+        <span class="ticker-content">
+            {% for n in notices %}
+            {% if n.is_important %}<span class="badge-important me-1">Important</span>{% endif %}
+            {{ n.title }}
+            &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+            {% endfor %}
+        </span>
+    </div>
+</div>
+{% endif %}
+
+<!-- ══ ABOUT SECTION ══ -->
+{% if about %}
+<section class="section-pad">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="about-img-wrap">
+                    <img src="{{ about.image.url }}" alt="{{ about.title }}" class="img-fluid">
+                    <div class="exp-badge">Est.<br>2000</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <p class="text-uppercase fw-600 mb-1"
+                    style="font-size:.85rem;letter-spacing:2px;color:var(--secondary)">Welcome to LFCS</p>
+                <h2 class="text-primary-custom mb-3">{{ about.title }}</h2>
+                <div class="mb-4" style="color:var(--muted);line-height:1.8">{{ about.description|safe|truncatewords_html:60 }}</div>
+                <!-- Stats row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                25+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Years</div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                1500+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Students</div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                80+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Faculty</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'about' %}" class="btn btn-primary-custom">Know More <i
+                        class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<!-- About fallback when no DB data -->
+<section class="section-pad">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <div class="about-img-wrap">
+                    <div class="rounded-3 overflow-hidden"
+                        style="height:380px;background:var(--gradient);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-school" style="font-size:8rem;color:rgba(255,255,255,.2);"></i>
+                    </div>
+                    <div class="exp-badge">Est.<br>2000</div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <p class="text-uppercase fw-600 mb-1"
+                    style="font-size:.85rem;letter-spacing:2px;color:var(--secondary)">Welcome to LFCS</p>
+                <h2 class="text-primary-custom mb-3">Little Flower Children School</h2>
+                <p style="color:var(--muted);line-height:1.8">
+                    Little Flower Children School is a premier institution committed to nurturing young minds with
+                    excellence in education, strong values, and holistic development. Spread over a sprawling campus,
+                    the school provides a safe, stimulating environment where children explore, discover, and grow.
+                </p>
+                <div class="row g-3 mb-4 mt-2">
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                25+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Years</div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                1500+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Students</div>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="p-3 rounded-3 bg-light-custom">
+                            <div
+                                style="font-size:1.8rem;font-weight:800;color:var(--primary);font-family:'Poppins',sans-serif;">
+                                80+</div>
+                            <div
+                                style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">
+                                Faculty</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="{% url 'about' %}" class="btn btn-primary-custom">Know More <i
+                        class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ══ LEADERSHIP TEAM ══ -->
+<section class="section-pad bg-primary-gradient position-relative overflow-hidden">
+    <!-- decorative circles -->
+    <div class="position-absolute"
+        style="width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,255,255,.08);top:-100px;right:-100px;pointer-events:none;">
+    </div>
+    <div class="position-absolute"
+        style="width:250px;height:250px;border-radius:50%;border:1px solid rgba(255,255,255,.05);bottom:-50px;left:-50px;pointer-events:none;">
+    </div>
+    <div class="container position-relative z-1">
+        <div class="section-title mb-5">
+            <h2 style="color:#fff;">Our Leadership Team</h2>
+            <div style="width:60px;height:4px;background:var(--secondary);border-radius:2px;margin:.6rem auto 0;"></div>
+            <p style="color:rgba(255,255,255,.7);margin-top:.6rem;">Guiding with vision, wisdom and dedication</p>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <!-- Director -->
+            {% if director %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    {% if director.photo %}
+                    <div class="leader-img-wrap">
+                        <img src="{{ director.photo.url }}" alt="{{ director.name }}">
+                    </div>
+                    {% else %}
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center bg-light-custom">
+                        <div class="leader-icon"><i class="fas fa-user-tie"></i></div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6>{{ director.name }}</h6>
+                        <small>{{ director.designation|default:"Director" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center"
+                        style="background:var(--light);">
+                        <div class="leader-icon"><i class="fas fa-user-tie"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h6>Director</h6>
+                        <small>Little Flower Children School</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Principal -->
+            {% if principal %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    {% if principal.photo %}
+                    <div class="leader-img-wrap">
+                        <img src="{{ principal.photo.url }}" alt="{{ principal.name }}">
+                    </div>
+                    {% else %}
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center bg-light-custom">
+                        <div class="leader-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h6>{{ principal.name }}</h6>
+                        <small>Principal</small>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center"
+                        style="background:var(--light);">
+                        <div class="leader-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h6>Principal</h6>
+                        <small>Little Flower Children School</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!-- Vice Principal placeholder -->
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center"
+                        style="background:var(--light);">
+                        <div class="leader-icon"><i class="fas fa-user-graduate"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h6>Vice Principal</h6>
+                        <small>Little Flower Children School</small>
+                    </div>
+                </div>
+            </div>
+            <!-- Academic Coordinator placeholder -->
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="leader-card">
+                    <div class="leader-img-wrap d-flex align-items-center justify-content-center"
+                        style="background:var(--light);">
+                        <div class="leader-icon"><i class="fas fa-book-open"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h6>Academic Coordinator</h6>
+                        <small>Little Flower Children School</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5">
+            <a href="{% url 'staff' %}" class="btn"
+                style="border:2px solid rgba(255,255,255,.6);color:#fff;border-radius:30px;padding:.7rem 2rem;font-weight:600;">
+                Meet Our Team <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ PRINCIPAL's MESSAGE  ══ -->
+{% if director or principal %}
+<section class="section-pad">
+    <div class="container">
+        <div class="section-title">
+            <h2>Messages from Leadership</h2>
+            <p>Guidance and inspiration from our school leaders</p>
+        </div>
+        <div class="row g-4">
+            {% if director %}
+            <div class="col-md-6">
+                <div class="message-card h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        {% if director.photo %}
+                        <img src="{{ director.photo.url }}" alt="{{ director.name }}" class="person-img">
+                        {% else %}
+                        <div class="person-img d-flex align-items-center justify-content-center"
+                            style="background:var(--gradient);">
+                            <i class="fas fa-user-tie" style="color:#fff;font-size:2rem;"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-0">{{ director.name }}</h5>
+                            <small class="text-muted">{{ director.designation }}</small>
+                        </div>
+                    </div>
+                    <div style="color:var(--muted);line-height:1.8;font-size:.92rem">{{ director.message|safe|truncatewords_html:50 }}</div>
+                    <a href="{% url 'director_message' %}" class="btn btn-outline-custom btn-sm mt-3">Read Full
+                        Message</a>
+                </div>
+            </div>
+            {% endif %}
+            {% if principal %}
+            <div class="col-md-6">
+                <div class="message-card h-100">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        {% if principal.photo %}
+                        <img src="{{ principal.photo.url }}" alt="{{ principal.name }}" class="person-img">
+                        {% else %}
+                        <div class="person-img d-flex align-items-center justify-content-center"
+                            style="background:var(--gradient);">
+                            <i class="fas fa-chalkboard-teacher" style="color:#fff;font-size:2rem;"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-0">{{ principal.name }}</h5>
+                            <small class="text-muted">Principal {{ principal.qualification }}</small>
+                        </div>
+                    </div>
+                    <div style="color:var(--muted);line-height:1.8;font-size:.92rem">{{ principal.message|safe|truncatewords_html:50 }}</div>
+                    <a href="{% url 'principal_message' %}" class="btn btn-outline-custom btn-sm mt-3">Read Full
+                        Message</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ══ FACILITIES ══ -->
+<section class="section-pad bg-light-custom">
+    <div class="container">
+        <div class="section-title">
+            <h2>Campus & Facilities</h2>
+            <p>State-of-the-art infrastructure for holistic development</p>
+        </div>
+        <div class="row g-4">
+            {% if facilities %}
+            {% for f in facilities|slice:":4" %}
+            <div class="col-6 col-lg-3">
+                <a href="{% url 'facilities' %}" class="facility-link-card">
+                    {% if f.image %}
+                    <img src="{{ f.image.url }}" alt="{{ f.title }}">
+                    {% else %}
+                    <div style="width:100%;height:100%;background:var(--gradient);"></div>
+                    {% endif %}
+                    <div class="fac-overlay">
+                        <i class="fas {{ f.icon|default:'fa-star' }}"></i>
+                        <span>{{ f.title }}</span>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Default 4 facility cards when no DB data -->
+            <div class="col-6 col-lg-3">
+                <div class="facility-link-card" style="cursor:default;">
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a3c6b,#0d5fa8);"></div>
+                    <div class="fac-overlay">
+                        <i class="fas fa-flask"></i>
+                        <span>Laboratory</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="facility-link-card" style="cursor:default;">
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#0d5fa8,#2980b9);"></div>
+                    <div class="fac-overlay">
+                        <i class="fas fa-chalkboard"></i>
+                        <span>Smart Classrooms</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="facility-link-card" style="cursor:default;">
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a6b3c,#2ecc71);"></div>
+                    <div class="fac-overlay">
+                        <i class="fas fa-running"></i>
+                        <span>Sports Ground</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <div class="facility-link-card" style="cursor:default;">
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#6b1a1a,#e84040);"></div>
+                    <div class="fac-overlay">
+                        <i class="fas fa-bus"></i>
+                        <span>Transport</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'facilities' %}" class="btn btn-outline-custom">View All Facilities</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CIRCULARS + QUICK ENQUIRY ══ -->
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Circulars / Notices (Sunbeam date-badge style) -->
+            <div class="col-lg-7">
+                <div class="section-title" style="text-align:left;margin-bottom:1.8rem;">
+                    <h2 style="display:inline-block;">Latest Circulars</h2>
+                    <div style="width:60px;height:4px;background:var(--secondary);border-radius:2px;margin-top:.5rem;">
+                    </div>
+                    <p>Stay updated with the latest school announcements</p>
+                </div>
+                {% if notices %}
+                {% for n in notices|slice:":6" %}
+                <div class="circular-item {% if n.is_important %}pinned{% endif %}">
+                    <div class="circular-date-badge">
+                        <div class="day">{{ n.publish_date|date:"d" }}</div>
+                        <div class="month">{{ n.publish_date|date:"M" }}</div>
+                    </div>
+                    <div class="circular-body">
+                        {% if n.is_important %}<span class="badge-important me-1">Important</span>{% endif %}
+                        <strong>{{ n.title }}</strong>
+                        {% if n.description %}<p>{{ n.description|truncatechars:100 }}</p>{% endif %}
+                        {% if n.pdf_file %}
+                        <a href="{{ n.pdf_file.url }}" target="_blank" class="read-more"><i
+                                class="fas fa-file-pdf me-1"></i>Read More</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <!-- Sample circulars when no data -->
+                <div class="circular-item">
+                    <div class="circular-date-badge">
+                        <div class="day">26</div>
+                        <div class="month">Feb</div>
+                    </div>
+                    <div class="circular-body">
+                        <strong>Remedial Classes &amp; Sports Camp</strong>
+                        <p>Details about upcoming remedial classes and sports camp for all students.</p>
+                        <span class="read-more"><i class="fas fa-arrow-right me-1"></i>Read More</span>
+                    </div>
+                </div>
+                <div class="circular-item">
+                    <div class="circular-date-badge">
+                        <div class="day">23</div>
+                        <div class="month">Feb</div>
+                    </div>
+                    <div class="circular-body">
+                        <strong>Skill Development Camp 2025-26</strong>
+                        <p>Students are encouraged to participate in the skill development camp.</p>
+                        <span class="read-more"><i class="fas fa-arrow-right me-1"></i>Read More</span>
+                    </div>
+                </div>
+                <div class="circular-item">
+                    <div class="circular-date-badge">
+                        <div class="day">10</div>
+                        <div class="month">Feb</div>
+                    </div>
+                    <div class="circular-body">
+                        <strong>Monthly Communication System</strong>
+                        <p>Important update regarding monthly communication with parents.</p>
+                        <span class="read-more"><i class="fas fa-arrow-right me-1"></i>Read More</span>
+                    </div>
+                </div>
+                <div class="circular-item">
+                    <div class="circular-date-badge">
+                        <div class="day">06</div>
+                        <div class="month">Feb</div>
+                    </div>
+                    <div class="circular-body">
+                        <strong>Date Sheet – Annual Examination (Class X)</strong>
+                        <p>Please review the date sheet for the Annual Examination for Class X.</p>
+                        <span class="read-more"><i class="fas fa-arrow-right me-1"></i>Read More</span>
+                    </div>
+                </div>
+                <div class="circular-item">
+                    <div class="circular-date-badge">
+                        <div class="day">06</div>
+                        <div class="month">Feb</div>
+                    </div>
+                    <div class="circular-body">
+                        <strong>Date Sheet – Annual Examination (Class XII)</strong>
+                        <p>Please review the date sheet for the Annual Examination for Class XII.</p>
+                        <span class="read-more"><i class="fas fa-arrow-right me-1"></i>Read More</span>
+                    </div>
+                </div>
+                {% endif %}
+                <a href="{% url 'notices' %}" class="btn btn-primary-custom mt-3">View All Notices <i
+                        class="fas fa-arrow-right ms-1"></i></a>
+            </div>
+
+            <!-- Quick Enquiry Form -->
+            <div class="col-lg-5">
+                <div class="section-title" style="text-align:left;margin-bottom:1.8rem;">
+                    <h2 style="display:inline-block;">Quick Enquiry</h2>
+                    <div style="width:60px;height:4px;background:var(--secondary);border-radius:2px;margin-top:.5rem;">
+                    </div>
+                    <p>Get in touch with us for admission details</p>
+                </div>
+                {% if success %}<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>Thank you! We
+                    will contact you soon.</div>{% endif %}
+                <form method="post" class="bg-white p-4 rounded-3 shadow-sm"
+                    style="border-top:4px solid var(--primary);">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">{{ field }}</div>
+                    {% empty %}
+                    <!-- Fallback form fields -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Your Name*" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="tel" class="form-control" placeholder="Phone Number*" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Email Address">
+                    </div>
+                    <div class="mb-3">
+                        <select class="form-select">
+                            <option value="">Class Applying For...</option>
+                            <option>Nursery</option>
+                            <option>KG</option>
+                            <option>Class I</option>
+                            <option>Class II</option>
+                            <option>Class III - V</option>
+                            <option>Class VI - VIII</option>
+                            <option>Class IX - XII</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="3" placeholder="Your Message (optional)"></textarea>
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary-custom w-100">Send Enquiry <i
+                            class="fas fa-paper-plane ms-1"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="section-pad bg-light-custom">
+    <div class="container">
+        <div class="section-title">
+            <h2>What Parents Say</h2>
+            <p>Hear from our school community</p>
+        </div>
+        <div class="position-relative px-4">
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+                <div class="carousel-inner">
+                    <!-- Carousel item 1 -->
+                    <div class="carousel-item active">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote-text">
+                                "As parents, seeing our child go to school every day with happiness fills us with joy.
+                                We sincerely thank Little Flower Children School for providing a caring and encouraging
+                                environment where every child is heard, valued, and guided to achieve their best."
+                            </p>
+                            <div class="author">
+                                <div class="author-icon-wrap"><i class="fas fa-user"></i></div>
+                                <div class="author-info">
+                                    <h6>Shweta Singh</h6>
+                                    <small>Mother of Jigyansh Pratap Singh – Class V</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Carousel item 2 -->
+                    <div class="carousel-item">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote-text">
+                                "Little Flower Children School has truly made a difference in my children's ability to
+                                perform. Both my children have been thriving in this environment. I thank the school for
+                                its dedication to excellence and for treating each child as an individual."
+                            </p>
+                            <div class="author">
+                                <div class="author-icon-wrap"><i class="fas fa-user"></i></div>
+                                <div class="author-info">
+                                    <h6>Sadhana Yadav</h6>
+                                    <small>Mother of Divya & Kartik</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Carousel item 3 -->
+                    <div class="carousel-item">
+                        <div class="testimonial-card">
+                            <div class="stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
+                                    class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                            <p class="quote-text">
+                                "As a parent, seeing my child head to school with a smile every morning is the greatest
+                                comfort. I want to express my sincere gratitude to Little Flower Children School for
+                                providing such a nurturing, safe, and academically stimulating environment."
+                            </p>
+                            <div class="author">
+                                <div class="author-icon-wrap"><i class="fas fa-user"></i></div>
+                                <div class="author-info">
+                                    <h6>Akanksha Singh</h6>
+                                    <small>Mother of Ishanvi Singh – Class III</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+                <div class="carousel-indicators" style="position:static;margin-top:1.5rem;">
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0"
+                        class="active"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ PHOTO GALLERY MEMORIES ══ -->
+{% if albums %}
+<section class="section-pad">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+                <p class="text-uppercase fw-600 mb-1" style="font-size:.8rem;letter-spacing:2px;color:var(--secondary)">
+                    School Memories</p>
+                <h2 class="text-primary-custom mb-0">Photo Gallery</h2>
+            </div>
+            <a href="{% url 'photo_gallery' %}" class="btn btn-outline-custom btn-sm">View All Albums</a>
+        </div>
+        <div class="row g-3">
+            {% for album in albums|slice:":8" %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="gallery-item">
+                    <img src="{{ album.cover_image.url }}" alt="{{ album.album_name }}" loading="lazy">
+                    <div class="overlay">
+                        <a href="{% url 'album_detail' album.pk %}"
+                            class="text-white d-flex flex-column align-items-center gap-2">
+                            <i class="fas fa-folder-open fa-2x"></i>
+                            <span>{{ album.album_name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ══ VIDEO GALLERY PREVIEW ══ -->
+{% if videos %}
+<section class="section-pad bg-light-custom">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+            <div>
+                <p class="text-uppercase fw-600 mb-1" style="font-size:.8rem;letter-spacing:2px;color:var(--secondary)">
+                    School Highlights</p>
+                <h2 class="text-primary-custom mb-0">Video Gallery</h2>
+            </div>
+            <a href="{% url 'video_gallery' %}" class="btn btn-outline-custom btn-sm">View All Videos</a>
+        </div>
+        <div class="row g-4">
+            {% for video in videos %}
+            <div class="col-md-4">
+                <div class="card-hover rounded-3 overflow-hidden">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ video.get_embed_url }}" title="{{ video.title }}" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="p-3 bg-white">
+                        <h6 class="mb-0">{{ video.title }}</h6>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ══ CTA BANNER ══ -->
+<section class="stats-bar">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-md-8">
+                <h3 class="text-white mb-1" style="font-family:'Poppins',sans-serif;font-weight:700;">Ready to Join Our
+                    Family?</h3>
+                <p style="color:rgba(255,255,255,.75);margin:0;">Admissions open for the academic year 2025–26. Nurture
+                    your child's potential with us.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'admission_process' %}" class="btn"
+                    style="background:var(--secondary);color:var(--dark);border-radius:30px;padding:.8rem 2.2rem;font-weight:700;font-size:1rem;box-shadow:0 4px 20px rgba(232,160,32,.4);">
+                    Apply for Admission <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-show popup on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const popupEl = document.getElementById('popupModal');
+        if (popupEl) {
+            const popup = new bootstrap.Modal(popupEl, { backdrop: true });
+            setTimeout(() => popup.show(), 800);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}House System – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>House System</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-4">
+            {% for house in houses %}
+            <div class="col-md-6 col-lg-3">
+                <div class="house-card">
+                    <div class="house-header" style="background:{{ house.color }};color:#fff">
+                        {% if house.logo %}<img src="{{ house.logo.url }}" alt="{{ house.house_name }}">{% else %}
+                        <div
+                            style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem">
+                            <i class="fas fa-flag fa-2x"></i></div>
+                        {% endif %}
+                        <h4>{{ house.house_name }}</h4>
+                    </div>
+                    {% for leader in house.leaders.all|slice:":1" %}
+                    <div class="p-3 bg-white">
+                        <table class="table table-sm mb-0" style="font-size:.82rem">
+                            <tr>
+                                <td class="text-muted">Head Boy</td>
+                                <td><strong>{{ leader.head_boy }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Head Girl</td>
+                                <td><strong>{{ leader.head_girl }}</strong></td>
+                            </tr>
+                            {% if leader.vice_head_boy %}<tr>
+                                <td class="text-muted">Vice Head Boy</td>
+                                <td>{{ leader.vice_head_boy }}</td>
+                            </tr>{% endif %}
+                            {% if leader.vice_head_girl %}<tr>
+                                <td class="text-muted">Vice Head Girl</td>
+                                <td>{{ leader.vice_head_girl }}</td>
+                            </tr>{% endif %}
+                            <tr>
+                                <td class="text-muted">Year</td>
+                                <td>{{ leader.year }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No house data available.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

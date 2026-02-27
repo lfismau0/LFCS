@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Facilities – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Our Facilities</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-4">
+            {% for f in facilities %}
+            <div class="col-md-4 col-lg-3">
+                <div class="facility-card text-center h-100">
+                    <div class="icon-wrap mx-auto"><i class="fas {{ f.icon|default:'fa-star' }}"></i></div>
+                    {% if f.image %}<img src="{{ f.image.url }}" alt="{{ f.title }}" class="mb-3"
+                        style="border-radius:8px;width:100%;height:180px;object-fit:cover">{% endif %}
+                    <h5>{{ f.title }}</h5>
+                    <p class="text-muted" style="font-size:.88rem">{{ f.description }}</p>
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No facilities listed.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

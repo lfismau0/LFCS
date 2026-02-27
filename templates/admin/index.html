@@ -1,0 +1,229 @@
+{% extends 'admin/index.html' %}
+{% load i18n static %}
+
+{% block content %}
+<div class="container-fluid px-0">
+
+    {# ── HERO BANNER ── #}
+    <div class="site-settings-banner mb-4">
+        <i class="fas fa-graduation-cap"></i>
+        <div>
+            <h4>LFIS School Administration Portal</h4>
+            <p>Manage every aspect of the website from this dashboard — logo, name, address, content and more.</p>
+        </div>
+        <div class="ms-auto d-flex gap-2 flex-wrap">
+            <a href="{% url 'admin:core_sitesettings_changelist' %}" class="btn btn-sm"
+                style="background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.4);">
+                <i class="fas fa-cog me-1"></i>Site Settings
+            </a>
+            <a href="/" target="_blank" class="btn btn-sm"
+                style="background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);">
+                <i class="fas fa-external-link-alt me-1"></i>View Website
+            </a>
+        </div>
+    </div>
+
+    {# ── STATS ROW ── #}
+    <div class="lfis-section-heading"><i class="fas fa-chart-bar"></i> At a Glance</div>
+    <div class="row g-3 mb-4" id="lfis-stats">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-blue"><i class="fas fa-users"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-staff">—</div>
+                    <div class="stat-lbl">Staff</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-gold"><i class="fas fa-bullhorn"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-notices">—</div>
+                    <div class="stat-lbl">Notices</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-green"><i class="fas fa-images"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-albums">—</div>
+                    <div class="stat-lbl">Albums</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-purple"><i class="fas fa-user-graduate"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-alumni">—</div>
+                    <div class="stat-lbl">Alumni</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-red"><i class="fas fa-user-plus"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-enquiries">—</div>
+                    <div class="stat-lbl">Enquiries</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="lfis-stat-card">
+                <div class="stat-icon si-teal"><i class="fas fa-building"></i></div>
+                <div>
+                    <div class="stat-val" id="stat-facilities">—</div>
+                    <div class="stat-lbl">Facilities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── QUICK ACTIONS ── #}
+    <div class="lfis-section-heading"><i class="fas fa-bolt"></i> Quick Actions</div>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:core_sitesettings_changelist' %}" class="lfis-quick-card lfis-qc-settings">
+                <i class="fas fa-cog"></i>
+                <div>
+                    <div class="qc-label">Site Settings</div>
+                    <div class="qc-sub">Logo · Name · Colors</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:core_contactinfo_changelist' %}" class="lfis-quick-card lfis-qc-contact">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <div class="qc-label">Contact Info</div>
+                    <div class="qc-sub">Address · Phone · Email</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:core_socialmedia_changelist' %}" class="lfis-quick-card lfis-qc-social">
+                <i class="fas fa-share-alt"></i>
+                <div>
+                    <div class="qc-label">Social Media</div>
+                    <div class="qc-sub">Facebook · Instagram · YouTube</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:core_banner_changelist' %}" class="lfis-quick-card lfis-qc-banner">
+                <i class="fas fa-images"></i>
+                <div>
+                    <div class="qc-label">Banners</div>
+                    <div class="qc-sub">Homepage Slider</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:notice_board_notice_add' %}" class="lfis-quick-card lfis-qc-notice">
+                <i class="fas fa-bullhorn"></i>
+                <div>
+                    <div class="qc-label">Add Notice</div>
+                    <div class="qc-sub">Notice Board</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:enquiry_enquiry_changelist' %}" class="lfis-quick-card lfis-qc-enquiry">
+                <i class="fas fa-envelope-open-text"></i>
+                <div>
+                    <div class="qc-label">Enquiries</div>
+                    <div class="qc-sub">View &amp; Reply</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:staff_staff_add' %}" class="lfis-quick-card lfis-qc-staff">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <div>
+                    <div class="qc-label">Add Staff</div>
+                    <div class="qc-sub">Staff Directory</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="{% url 'admin:gallery_album_add' %}" class="lfis-quick-card lfis-qc-gallery">
+                <i class="fas fa-camera"></i>
+                <div>
+                    <div class="qc-label">Add Album</div>
+                    <div class="qc-sub">Photo Gallery</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    {# ── STANDARD APP LIST (original Jazzmin content) ── #}
+    <div class="lfis-section-heading"><i class="fas fa-th-large"></i> All Sections</div>
+    {{ block.super }}
+</div>
+
+<script>
+    // Animated counters for stats
+    (function () {
+        function animateCount(el, target) {
+            let start = 0;
+            const step = Math.ceil(target / 30);
+            const timer = setInterval(() => {
+                start += step;
+                if (start >= target) { el.textContent = target; clearInterval(timer); }
+                else { el.textContent = start; }
+            }, 30);
+        }
+
+        // Fetch counts from Django admin meta (we read the app list)
+        const mapping = [
+            ['stat-staff', 'staff.Staff'],
+            ['stat-notices', 'notice_board.Notice'],
+            ['stat-albums', 'gallery.Album'],
+            ['stat-alumni', 'alumni.Alumni'],
+            ['stat-enquiries', 'enquiry.Enquiry'],
+            ['stat-facilities', 'facilities.Facility'],
+        ];
+
+        // Use admin API-like approach: parse the visible app list
+        // As a fallback we just display the page list counts from admin meta
+        document.querySelectorAll('.app-list .module').forEach(mod => {
+            mod.querySelectorAll('table tbody tr').forEach(row => {
+                const link = row.querySelector('a');
+                if (!link) return;
+                const href = link.getAttribute('href') || '';
+                if (href.includes('/staff/staff/')) countEl('stat-staff');
+                if (href.includes('/notice_board/')) countEl('stat-notices');
+                if (href.includes('/gallery/album/')) countEl('stat-albums');
+                if (href.includes('/alumni/alumni/')) countEl('stat-alumni');
+                if (href.includes('/enquiry/enquiry/')) countEl('stat-enquiries');
+                if (href.includes('/facilities/facility/')) countEl('stat-facilities');
+            });
+        });
+
+        function countEl(id) {
+            const el = document.getElementById(id);
+            if (el && el.textContent === '—') el.textContent = '…';
+        }
+
+        // Ping the changelist pages for accurate counts using admin list
+        const counts = {
+            'stat-staff': '{{ staff_count|default:"?" }}',
+            'stat-notices': '{{ notice_count|default:"?" }}',
+            'stat-albums': '{{ album_count|default:"?" }}',
+            'stat-alumni': '{{ alumni_count|default:"?" }}',
+            'stat-enquiries': '{{ enquiry_count|default:"?" }}',
+            'stat-facilities': '{{ facility_count|default:"?" }}',
+        };
+        Object.entries(counts).forEach(([id, val]) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const n = parseInt(val, 10);
+            if (!isNaN(n)) animateCount(el, n);
+            else el.textContent = val;
+        });
+    })();
+</script>
+{% endblock %}

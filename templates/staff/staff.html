@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Staff – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Our Staff</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <!-- Department Tabs -->
+        <div class="d-flex flex-wrap gap-2 mb-4 justify-content-center">
+            <button class="btn dept-tab btn-sm btn-primary-custom" data-dept="" onclick="filterDept('')">All</button>
+            {% for val,label in departments %}
+            <button class="btn dept-tab btn-sm btn-outline-custom" data-dept="{{ val }}"
+                onclick="filterDept('{{ val }}')">{{ label }}</button>
+            {% endfor %}
+        </div>
+        <div class="row g-4">
+            {% for s in staff %}
+            <div class="col-6 col-md-4 col-lg-3 staff-card-wrap" data-dept="{{ s.department }}">
+                <div class="card staff-card card-hover">
+                    {% if s.photo %}<img src="{{ s.photo.url }}" alt="{{ s.name }}">{% else %}<div
+                        style="height:220px;background:var(--light);display:flex;align-items:center;justify-content:center">
+                        <i class="fas fa-user-circle fa-5x text-muted"></i></div>{% endif %}
+                    <div class="card-body">
+                        <h6 class="mb-1">{{ s.name }}</h6>
+                        <p class="mb-1 text-muted" style="font-size:.82rem">{{ s.designation }}</p>
+                        <span class="dept-badge">{{ s.get_department_display }}</span>
+                        {% if s.qualification %}<p class="mt-1 mb-0 text-muted" style="font-size:.75rem">{{ s.qualification }}</p>{% endif %}
+                        {% if s.experience %}<p class="mb-0 text-muted" style="font-size:.75rem">Exp: {{ s.experience }}
+                        </p>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">No staff found.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

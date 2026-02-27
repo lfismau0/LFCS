@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Director's Message – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Director's Message</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container" style="max-width:900px">
+        {% if director %}
+        <div class="message-card">
+            <div class="d-flex align-items-center gap-4 mb-4">
+                <img src="{{ director.photo.url }}" alt="{{ director.name }}" class="person-img"
+                    style="width:120px;height:120px;">
+                <div>
+                    <h3 class="text-primary-custom mb-1">{{ director.name }}</h3>
+                    <p class="text-muted mb-0">{{ director.designation }}</p>
+                </div>
+            </div>
+            <div style="line-height:2;color:var(--text)">{{ director.message|safe }}</div>
+        </div>
+        {% else %}
+        <p class="text-muted text-center">Director's message coming soon.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

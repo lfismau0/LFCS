@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Principal's Message – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Principal's Message</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container" style="max-width:900px">
+        {% if principal %}
+        <div class="message-card">
+            <div class="d-flex align-items-center gap-4 mb-4">
+                <img src="{{ principal.photo.url }}" alt="{{ principal.name }}" class="person-img"
+                    style="width:120px;height:120px;">
+                <div>
+                    <h3 class="text-primary-custom mb-1">{{ principal.name }}</h3>
+                    <p class="text-muted mb-0">Principal {% if principal.qualification %}| {{ principal.qualification }}{% endif %}</p>
+                </div>
+            </div>
+            <div style="line-height:2;color:var(--text)">{{ principal.message|safe }}</div>
+        </div>
+        {% else %}
+        <p class="text-muted text-center">Principal's message coming soon.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

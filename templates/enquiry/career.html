@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Career – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Career Opportunities</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container" style="max-width:740px">
+        <div class="bg-white rounded-3 shadow p-5">
+            <h4 class="text-primary-custom mb-1"><i class="fas fa-briefcase me-2"></i>Apply for a Position</h4>
+            <p class="text-muted mb-4">We're always looking for passionate educators and dedicated staff. Upload your
+                resume and we'll be in touch.</p>
+            {% if success %}<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>Application
+                submitted successfully! We'll review your profile and contact you.</div>{% endif %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3">
+                    {% for field in form %}<div class="col-12 col-md-6">{{ field }}</div>{% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100 mt-3">Submit Application <i
+                        class="fas fa-paper-plane ms-1"></i></button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active">Contact</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h3 class="text-primary-custom mb-4">Get In Touch</h3>
+                {% if contact %}
+                <ul class="list-unstyled">
+                    <li class="d-flex gap-3 mb-4">
+                        <div
+                            style="width:48px;height:48px;background:rgba(26,60,107,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                            <i class="fas fa-map-marker-alt" style="color:var(--primary)"></i></div>
+                        <div><strong>Address</strong>
+                            <p class="mb-0 text-muted">{{ contact.address }}</p>
+                        </div>
+                    </li>
+                    <li class="d-flex gap-3 mb-4">
+                        <div
+                            style="width:48px;height:48px;background:rgba(26,60,107,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                            <i class="fas fa-phone-alt" style="color:var(--primary)"></i></div>
+                        <div><strong>Phone</strong>
+                            <p class="mb-0"><a href="tel:{{ contact.phone }}" class="text-muted">{{ contact.phone }}</a>
+                            </p>
+                        </div>
+                    </li>
+                    {% if contact.whatsapp %}<li class="d-flex gap-3 mb-4">
+                        <div
+                            style="width:48px;height:48px;background:rgba(37,211,102,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                            <i class="fab fa-whatsapp" style="color:#25d366"></i></div>
+                        <div><strong>WhatsApp</strong>
+                            <p class="mb-0"><a href="https://wa.me/{{ contact.whatsapp }}" class="text-muted">{{ contact.whatsapp }}</a></p>
+                        </div>
+                    </li>{% endif %}
+                    <li class="d-flex gap-3 mb-4">
+                        <div
+                            style="width:48px;height:48px;background:rgba(26,60,107,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                            <i class="fas fa-envelope" style="color:var(--primary)"></i></div>
+                        <div><strong>Email</strong>
+                            <p class="mb-0"><a href="mailto:{{ contact.email }}" class="text-muted">{{ contact.email }}</a></p>
+                        </div>
+                    </li>
+                </ul>
+                {% if contact.google_map_embed_code %}{{ contact.google_map_embed_code|safe }}{% endif %}
+                {% endif %}
+            </div>
+            <div class="col-lg-7">
+                <div class="bg-white rounded-3 shadow-sm p-4 p-lg-5">
+                    <h3 class="text-primary-custom mb-4">Send Us a Message</h3>
+                    {% if success %}<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>Message
+                        sent successfully!</div>{% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            {% for field in form %}
+                            <div class="col-12">{{ field }}</div>
+                            {% endfor %}
+                            <div class="col-12"><button type="submit" class="btn btn-primary-custom w-100">Send Message
+                                    <i class="fas fa-paper-plane ms-2"></i></button></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

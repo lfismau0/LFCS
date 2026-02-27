@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Admission Process – LFIS{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Admission Process</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container" style="max-width:860px">
+        {% if info %}
+        <div class="bg-white rounded-3 shadow-sm p-5">
+            <div style="line-height:2">{{ info.description|safe }}</div>
+            {% if info.file_upload %}
+            <div class="mt-4">
+                <a href="{{ info.file_upload.url }}" class="btn btn-primary-custom" target="_blank"><i
+                        class="fas fa-file-download me-2"></i>View Document</a>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <p class="text-muted text-center">Admission details coming soon.</p>
+        {% endif %}
+        <div class="text-center mt-4">
+            <a href="{% url 'enquiry' %}" class="btn btn-primary-custom"><i class="fas fa-envelope me-2"></i>Submit
+                Enquiry</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

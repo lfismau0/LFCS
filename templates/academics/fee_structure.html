@@ -1,0 +1,24 @@
+﻿{% extends 'base.html' %}
+{% block title %}Fee Structure - Little Flower Children School{% endblock %}
+{% block content %}
+<div class="page-hero">
+    <div class="container">
+        <h1>Fee Structure</h1>
+    </div>
+</div>
+<section class="section-pad">
+    <div class="container">
+        <div class="row g-4">
+            {% for item in items %}
+            <div class="col-md-6">
+                <div class="card-hover rounded-3 p-4 bg-white h-100">
+                    <h5 class="text-primary-custom"><i class="fas fa-rupee-sign me-2"></i>{{ item.class_name }}</h5>
+                    {% if item.fee_details %}<div class="text-muted mt-2" style="font-size:.9rem">{{ item.fee_details|safe }}</div>{% endif %}
+                    {% if item.file_upload %}<a href="{{ item.file_upload.url }}" class="btn btn-sm btn-primary-custom mt-3" target="_blank"><i class="fas fa-file-download me-1"></i>View Document</a>{% endif %}
+                </div>
+            </div>
+            {% empty %}<p class="text-muted col-12">Fee structure not yet available.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
